@@ -42,7 +42,7 @@ export async function POST(request: Request) {
         if (action === "create_portal") {
             const session = await stripe.billingPortal.sessions.create({
                 customer: customerId,
-                return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/subscription`,
+                return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/`,
             });
             return NextResponse.json({ url: session.url });
         }
