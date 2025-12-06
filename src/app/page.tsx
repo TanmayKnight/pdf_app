@@ -1,7 +1,7 @@
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { ToolCard } from "@/components/tool-card";
-import { Combine, Split, Minimize2, Image as ImageIcon, FileJson, RotateCw, Shield, Unlock, FileType } from "lucide-react";
+import { Combine, Split, Minimize2, Image as ImageIcon, FileJson, RotateCw, Shield, Unlock, FileType, Stamp, Hash, LayoutGrid } from "lucide-react";
 
 export default function Home() {
   const tools = [
@@ -40,6 +40,24 @@ export default function Home() {
       description: "Rotate your PDFs the way you need them. You can even rotate multiple PDFs at once!",
       icon: RotateCw,
       href: "/rotate-pdf",
+    },
+    {
+      title: "Watermark PDF",
+      description: "Stamp text over your PDF pages. Customize position, transparency, and typography.",
+      icon: Stamp,
+      href: "/watermark-pdf",
+    },
+    {
+      title: "Page Numbers",
+      description: "Easily number your PDF pages. Choose position, start number, and style.",
+      icon: Hash,
+      href: "/page-numbers",
+    },
+    {
+      title: "Organize PDF",
+      description: "Rearrange document pages, delete unnecessary ones, and download your new PDF.",
+      icon: LayoutGrid,
+      href: "/organize-pdf",
     },
     {
       title: "Protect PDF",

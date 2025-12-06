@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Menu, X, ChevronDown, FileText, Scissors, Minimize2, Image, FileJson, RotateCw, Shield, Unlock, User, Settings, LogOut } from "lucide-react";
+import { Menu, X, ChevronDown, FileText, Scissors, Minimize2, Image, FileJson, RotateCw, Shield, Unlock, User, Settings, LogOut, Stamp, Hash, LayoutGrid } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
@@ -42,7 +42,9 @@ export function Navbar() {
         { name: "Compress PDF", href: "/compress-pdf", icon: Minimize2 },
         { name: "PDF to Image", href: "/pdf-to-image", icon: Image },
         { name: "Image to PDF", href: "/image-to-pdf", icon: FileJson },
-        { name: "Rotate PDF", href: "/rotate-pdf", icon: RotateCw },
+        { name: "Watermark PDF", href: "/watermark-pdf", icon: Stamp },
+        { name: "Page Numbers", href: "/page-numbers", icon: Hash },
+        { name: "Organize PDF", href: "/organize-pdf", icon: LayoutGrid },
         { name: "Protect PDF", href: "/protect-pdf", icon: Shield },
         { name: "Unlock PDF", href: "/unlock-pdf", icon: Unlock },
     ];

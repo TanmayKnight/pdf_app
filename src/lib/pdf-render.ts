@@ -1,7 +1,7 @@
 // Remove top level import to prevent SSR issues
 // import * as pdfjsLib from 'pdfjs-dist';
 
-export async function convertPdfToImages(file: File): Promise<Blob[]> {
+export async function convertPdfToImages(file: File, maxPages?: number, scale: number = 2.0): Promise<Blob[]> {
     // Dynamic import to ensure this only runs on client
     const pdfjsLib = await import('pdfjs-dist');
 
@@ -14,9 +14,11 @@ export async function convertPdfToImages(file: File): Promise<Blob[]> {
     const pageCount = pdf.numPages;
     const images: Blob[] = [];
 
-    for (let i = 1; i <= pageCount; i++) {
+    const limit = maxPages ? Math.min(pageCount, maxPages) : pageCount;
+
+    for (let i = 1; i <= limit; i++) {
         const page = await pdf.getPage(i);
-        const viewport = page.getViewport({ scale: 2.0 }); // High quality scale
+        const viewport = page.getViewport({ scale });
 
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
