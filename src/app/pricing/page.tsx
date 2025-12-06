@@ -3,7 +3,7 @@
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Check, Loader2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 
@@ -11,6 +11,26 @@ export default function PricingPage() {
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
     const supabase = createClient();
+
+    useEffect(() => {
+        // Check if user is already pro
+        const checkPro = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                try {
+                    const res = await fetch("/api/billing", {
+                        method: "POST",
+                        body: JSON.stringify({ action: "check_status" })
+                    });
+                    const data = await res.json();
+                    if (data.isPro) {
+                        router.replace("/subscription");
+                    }
+                } catch (e) { }
+            }
+        };
+        checkPro();
+    }, []);
 
     const handleSubscribe = async () => {
         setIsLoading(true);

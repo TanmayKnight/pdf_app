@@ -1,13 +1,40 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { Menu, X, ChevronDown, FileText, Scissors, Minimize2, Image, FileJson, RotateCw, Shield, Unlock } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Menu, X, ChevronDown, FileText, Scissors, Minimize2, Image, FileJson, RotateCw, Shield, Unlock, User, Settings, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { createClient } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
 
 export function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isToolsOpen, setIsToolsOpen] = useState(false);
+    const [user, setUser] = useState<any>(null);
+    const [isProfileOpen, setIsProfileOpen] = useState(false);
+    const supabase = createClient();
+    const router = useRouter();
+
+    useEffect(() => {
+        const getUser = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            setUser(user);
+        };
+        getUser();
+
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            setUser(session?.user ?? null);
+        });
+
+        return () => subscription.unsubscribe();
+    }, []);
+
+    const handleLogout = async () => {
+        await supabase.auth.signOut();
+        setUser(null);
+        router.push("/");
+        router.refresh();
+    };
 
     const tools = [
         { name: "Merge PDF", href: "/merge-pdf", icon: FileText },
@@ -67,10 +94,42 @@ export function Navbar() {
                 {/* Auth Buttons */}
                 <div className="flex items-center gap-4">
                     <div className="hidden md:flex items-center gap-4">
-                        <Link href="/login" className="text-sm font-bold text-slate-700 hover:text-primary">Log In</Link>
-                        <Link href="/signup" className="bg-slate-900 hover:bg-slate-800 text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
-                            Sign up
-                        </Link>
+                        {user ? (
+                            <div className="relative group">
+                                <button
+                                    onClick={() => setIsProfileOpen(!isProfileOpen)}
+                                    className="flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-primary transition-colors"
+                                >
+                                    <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+                                        <User className="w-5 h-5" />
+                                    </div>
+                                    <span className="max-w-[100px] truncate">{user.user_metadata?.full_name || user.email}</span>
+                                    <ChevronDown className="w-4 h-4 text-slate-400" />
+                                </button>
+
+                                <div className="absolute top-full right-0 w-48 bg-white rounded-xl shadow-xl border border-slate-100 p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 flex flex-col">
+                                    <Link href="/subscription" className="flex items-center gap-2 w-full p-2 hover:bg-slate-50 rounded-lg text-sm text-slate-700 font-medium text-left">
+                                        <Settings className="w-4 h-4" />
+                                        Manage Subscription
+                                    </Link>
+                                    <hr className="my-1 border-slate-100" />
+                                    <button
+                                        onClick={handleLogout}
+                                        className="flex items-center gap-2 w-full p-2 hover:bg-red-50 text-red-600 rounded-lg text-sm font-medium text-left"
+                                    >
+                                        <LogOut className="w-4 h-4" />
+                                        Log Out
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            <>
+                                <Link href="/login" className="text-sm font-bold text-slate-700 hover:text-primary">Log In</Link>
+                                <Link href="/signup" className="bg-slate-900 hover:bg-slate-800 text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                                    Sign up
+                                </Link>
+                            </>
+                        )}
                     </div>
                     <button
                         className="md:hidden p-2 text-slate-700"
@@ -98,8 +157,21 @@ export function Navbar() {
                         ))}
                     </div>
                     <hr className="border-slate-100" />
-                    <Link href="/login" className="block text-center w-full py-3 font-bold text-slate-700 bg-slate-50 rounded-lg">Log In</Link>
-                    <Link href="/signup" className="block text-center w-full py-3 font-bold text-white bg-primary rounded-lg">Sign up</Link>
+                    {user ? (
+                        <>
+                            <div className="flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-lg">
+                                <User className="w-5 h-5 text-primary" />
+                                <span className="text-sm font-bold text-slate-700 truncate">{user.user_metadata?.full_name || user.email}</span>
+                            </div>
+                            <Link href="/subscription" className="block text-center w-full py-3 font-bold text-slate-700 bg-white border border-slate-200 rounded-lg">Manage Config</Link>
+                            <button onClick={handleLogout} className="block text-center w-full py-3 font-bold text-red-600 bg-red-50 rounded-lg">Log Out</button>
+                        </>
+                    ) : (
+                        <>
+                            <Link href="/login" className="block text-center w-full py-3 font-bold text-slate-700 bg-slate-50 rounded-lg">Log In</Link>
+                            <Link href="/signup" className="block text-center w-full py-3 font-bold text-white bg-primary rounded-lg">Sign up</Link>
+                        </>
+                    )}
                 </div>
             )}
         </nav>
