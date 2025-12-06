@@ -1,65 +1,107 @@
-import Image from "next/image";
+import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
+import { ToolCard } from "@/components/tool-card";
+import { Combine, Split, Minimize2, Image as ImageIcon, FileJson, RotateCw, Shield, Unlock, FileType } from "lucide-react";
 
 export default function Home() {
+  const tools = [
+    {
+      title: "Merge PDF",
+      description: "Combine PDFs in the order you want with the easiest PDF merger available.",
+      icon: Combine,
+      href: "/merge-pdf",
+    },
+    {
+      title: "Split PDF",
+      description: "Separate one page or a whole set for easy conversion into independent PDF files.",
+      icon: Split,
+      href: "/split-pdf",
+    },
+    {
+      title: "Compress PDF",
+      description: "Reduce file size while optimizing for maximal PDF quality.",
+      icon: Minimize2,
+      href: "/compress-pdf",
+    },
+    {
+      title: "PDF to Image",
+      description: "Convert each PDF page into a JPG or extract all images contained in a PDF.",
+      icon: ImageIcon,
+      href: "/pdf-to-image",
+    },
+    {
+      title: "Image to PDF",
+      description: "Convert JPG images to PDF in seconds. Easily adjust orientation and margins.",
+      icon: FileJson, // Using FileJson as placeholder for Image->PDF generic icon or FileType
+      href: "/image-to-pdf",
+    },
+    {
+      title: "Rotate PDF",
+      description: "Rotate your PDFs the way you need them. You can even rotate multiple PDFs at once!",
+      icon: RotateCw,
+      href: "/rotate-pdf",
+    },
+    {
+      title: "Protect PDF",
+      description: "Encrypt your PDF with a password to keep sensitive data confidential.",
+      icon: Shield,
+      href: "/protect-pdf",
+    },
+    {
+      title: "Unlock PDF",
+      description: "Remove PDF password security, giving you the freedom to use your PDFs as you want.",
+      icon: Unlock,
+      href: "/unlock-pdf",
+    },
+  ];
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="min-h-screen flex flex-col bg-slate-50">
+      <Navbar />
+
+      {/* Hero Section */}
+      <section className="bg-[#e11d48] pt-20 pb-32 px-4 text-center">
+        <div className="container mx-auto">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6 tracking-tight">
+            SwiftPDF - The Feature Rich PDF Tool
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-white/90 text-xl max-w-2xl mx-auto font-light leading-relaxed">
+            All tools are 100% FREE! Merge, split, compress, convert, rotate, and secure your PDFs instantly.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* Tools Grid */}
+      <section className="container mx-auto px-4 -mt-20 mb-20 z-10 relative">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {tools.map((tool) => (
+            <ToolCard key={tool.title} {...tool} />
+          ))}
         </div>
-      </main>
+      </section>
+
+      {/* Value Proposition / SEO Text */}
+      <section className="bg-white py-20 border-t border-border">
+        <div className="container mx-auto px-4 max-w-4xl text-center">
+          <h2 className="text-3xl font-bold mb-8 text-foreground">The PDF Software Trusted by Millions of Users</h2>
+          <div className="grid md:grid-cols-3 gap-8 text-left">
+            <div>
+              <h3 className="font-bold text-lg mb-2">Cost Effective</h3>
+              <p className="text-muted-foreground text-sm">Our infrastructure is designed for efficiency, passing the savings to you.</p>
+            </div>
+            <div>
+              <h3 className="font-bold text-lg mb-2">Secure & Private</h3>
+              <p className="text-muted-foreground text-sm">All processing happens in your browser where possible, ensuring maximum privacy.</p>
+            </div>
+            <div>
+              <h3 className="font-bold text-lg mb-2">Universal Compatibility</h3>
+              <p className="text-muted-foreground text-sm">Works on all devices and platforms including Windows, Mac, and Linux.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
     </div>
   );
 }
